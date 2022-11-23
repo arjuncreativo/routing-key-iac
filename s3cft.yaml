@@ -1,0 +1,23 @@
+Parameters:
+  BucketName:
+    Type: String
+    Description: S3 Bucket Name
+
+Resources:
+    s3bucket:
+        Type: "AWS::S3::Bucket"
+        Properties:
+            BucketName: !Ref BucketName
+    S3BUCKETPOLICY:
+        Type: "AWS::S3::BucketPolicy"
+        Properties:
+          Bucket: !Ref s3bucket
+          PolicyDocument:
+            Id: myPolicy
+            Version: 2012-10-17
+            Statement:
+              - Sid: mypolicydoc
+                Action: 's3:ListBucket'
+                Effect: Allow
+                Resource: !Sub 'arn:aws:s3:::${BucketName}'
+                Principal: '*'  

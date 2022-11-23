@@ -1,0 +1,43 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: Dynamo DB Creation
+
+Parameters:
+  ReadCapacityUnits:
+    Description: Provisioned read throughput
+    Type: Number
+    Default: '1'
+    MinValue: '1'
+    MaxValue: '10000'
+    ConstraintDescription: must be between 5 and 10000
+  WriteCapacityUnits:
+    Description: Provisioned write throughput
+    Type: Number
+    Default: '1'
+    MinValue: '1'
+    MaxValue: '10000'
+    ConstraintDescription: must be between 5 and 10000
+
+  DynamoTableName:
+    Type: String
+    Description: Routing Key Name
+
+Resources:
+  dynamoaroutingkey:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref DynamoTableName
+      ProvisionedThroughput:
+        ReadCapacityUnits: !Ref 'ReadCapacityUnits'
+        WriteCapacityUnits: !Ref 'WriteCapacityUnits'
+      AttributeDefinitions: 
+      - AttributeName: "url"
+        AttributeType: "S"
+      - AttributeName: "datetime"
+        AttributeType: "N"        
+      KeySchema: 
+      - AttributeName: "url"
+        KeyType: "HASH"
+      - AttributeName: "datetime"
+        KeyType: "RANGE"  
